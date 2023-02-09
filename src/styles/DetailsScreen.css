@@ -1,0 +1,64 @@
+.details-screen-wrapper{
+    width: 100vw;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-color: var(--movieDetails-bg);
+}
+
+.info-container{
+    padding:5vh 10vw;
+    color: var(--onMovieDetailsBg);
+}
+
+.header-section{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ratings{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 20vw;
+}
+
+.avg-rating{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.movie-title{
+    font-size: 2pc;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.poster-wrapper{
+    margin-top: 20px;
+    width: 100%;
+    height: 70vh;
+    position: relative;
+}
+
+.poster{
+    width: 100%;
+    height: 100%;
+    object-fit:cover;
+}
+
+.overview-wrapper{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    max-height: 40%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-top-right-radius: 4px;
+}
+
+.overview{
+    margin-left: 20px;
+    color: rgb(195, 48, 48);
+}

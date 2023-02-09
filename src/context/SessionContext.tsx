@@ -10,6 +10,7 @@ import { createNewSessionApi } from "../api/session";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 type SessionContext = {
+  session?: Session;
   createNewSession: () => void;
 };
 
@@ -70,6 +71,8 @@ export function SessionProvider({ children }: SessionProviderProps) {
   }
 
   return (
-    <Context.Provider value={{ createNewSession }}>{children}</Context.Provider>
+    <Context.Provider value={{ session, createNewSession }}>
+      {children}
+    </Context.Provider>
   );
 }

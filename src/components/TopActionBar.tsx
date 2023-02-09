@@ -6,7 +6,7 @@ import SearchInput from "./SearchInputField";
 export default function TopActionBar() {
   return (
     <div className="TABwrapper">
-      <h5 className="title">tmdb-api-app</h5>
+      <h5 className="title">TMDB-API-APP</h5>
       <SearchInput />
       <Dropdown />
     </div>

@@ -17,13 +17,30 @@ export default function Main() {
     <div className="screen">
       <TopActionBar />
       <div className="movies-wrapper">
-        {movies.length > 0 &&
-          movies.map((movie) => {
-            return <MovieCard movie={movie} />;
-          })}
-        <button onClick={() => setCurrentPage((prevState) => prevState + 1)}>
-          Load More
-        </button>
+        <div className="movies-list">
+          {movies.length > 0 &&
+            movies.map((movie) => {
+              return <MovieCard movie={movie} />;
+            })}
+        </div>
+        <div
+          style={{
+            width: "100%",
+            height: "3vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "20px",
+            paddingBottom: "3vh",
+          }}
+        >
+          <button
+            className="load-btn"
+            onClick={() => setCurrentPage((prevState) => prevState + 1)}
+          >
+            Load More
+          </button>
+        </div>
       </div>
     </div>
   );

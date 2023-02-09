@@ -1,9 +1,4 @@
-import React, {
-  ReactEventHandler,
-  ReactHTMLElement,
-  useRef,
-  useState,
-} from "react";
+import React, { useRef, useState } from "react";
 import "../styles/SearchInputField.css";
 import { AiOutlineSearch } from "react-icons/ai";
 

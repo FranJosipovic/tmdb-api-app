@@ -1,8 +1,10 @@
 :root{
-    --backround-color: #2D033B;
-    --onBackground: #810CA8;
-    --primary: #C147E9;
-    --secondary: #E5B8F4
+    --backround-color: #000000;
+    --onBackground: #585658;
+    --primary: #b3b3b3;
+    --secondary: #07870b;
+    --movieDetails-bg: #1A1A2E;
+    --onMovieDetailsBg: white; 
 }
 
 ::-webkit-scrollbar {
@@ -10,12 +12,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #2D033B;
+    background-color: var(--onBackground);
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background-color: #810CA8;
+    background-color: var(--backround-color);
 }
 
 body{
@@ -23,22 +25,39 @@ body{
     padding: 0;
 }
 
-.screen{
+.screen {
     width: 100vw;
     height: 100vh;
     background-color: var(--backround-color);
+    overflow-y: hidden;
 }
 
-.movies-wrapper{
+.movies-wrapper {
     padding-top: 3vh;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin: 0 auto;
-    justify-content: center;
     width: 100%;
     height: 87vh;
     overflow-y: scroll;
-    padding-bottom: 3vh;
+
 }
 
+.movies-list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.load-btn{
+    background-color: transparent;
+    padding: 10px 30px;color: var(--onBackground);
+    border: 1px solid var(--onBackground);
+    border-radius: 2px;
+    margin-top: 3vh;
+}
+
+.load-btn:hover{
+    cursor: pointer;
+    background-color: var(--onBackground);
+    color: var(--backround-color);
+    border: 1px solid var(--backround-color);
+}

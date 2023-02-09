@@ -1,10 +1,28 @@
 import exp from "constants";
-import { createContext, useContext, ReactNode, useState } from "react";
-import { getNowPlayingMovies } from "../api/movie";
+import {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useEffect,
+} from "react";
+import {
+  getMovieDetailsApi,
+  getNowPlayingMovies,
+  rateMovie,
+} from "../api/movie";
+import { getRatedMovies } from "../api/session";
+import { useSession } from "./SessionContext";
 
 type MovieContext = {
   movies: Movie[];
+  movie: MovieDetails | null;
+  movieRating: number | null;
   getMovies: (page: number) => void;
+  getMovieDetails: (movieId: string) => void;
+  setMovie: React.Dispatch<React.SetStateAction<MovieDetails | null>>;
+  handleRateMovie: (rating: number) => void;
+  setMovieRating: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 const Context = createContext<MovieContext | null>(null);
@@ -93,7 +111,11 @@ type MovieProviderProps = {
 };
 
 export function MovieProvider({ children }: MovieProviderProps) {
+  const { session } = useSession();
+
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [movie, setMovie] = useState<MovieDetails | null>(null);
+  const [movieRating, setMovieRating] = useState<number | null>(null);
 
   function getMovies(page: number) {
     getNowPlayingMovies(page).then((data) => {
@@ -103,8 +125,46 @@ export function MovieProvider({ children }: MovieProviderProps) {
     });
   }
 
+  function getMovieDetails(movieId: string) {
+    getMovieDetailsApi(movieId).then((movieDetails) => {
+      getRatedMovies(session?.guest_session_id!).then((ratedMovies) => {
+        let ratedMovie = ratedMovies.results.find((r: any) => {
+          return r.id === Number(movieId);
+        });
+        if (ratedMovie) {
+          setMovieRating(ratedMovie.rating);
+        } else {
+          setMovieRating(null);
+        }
+      });
+      setMovie(movieDetails);
+    });
+  }
+
+  function handleRateMovie(rating: number) {
+    if (!session) {
+      return;
+    }
+    rateMovie(movie?.id!, rating, session.guest_session_id).then((data) => {
+      if (data.success) {
+        setMovieRating(rating);
+      }
+    });
+  }
+
   return (
-    <Context.Provider value={{ movies, getMovies }}>
+    <Context.Provider
+      value={{
+        movies,
+        movie,
+        movieRating,
+        getMovies,
+        getMovieDetails,
+        setMovie,
+        handleRateMovie,
+        setMovieRating,
+      }}
+    >
       {children}
     </Context.Provider>
   );
