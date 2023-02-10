@@ -10,6 +10,7 @@ import {
   getMovieDetailsApi,
   getNowPlayingMovies,
   rateMovie,
+  searchMovie,
 } from "../api/movie";
 import { getRatedMovies } from "../api/session";
 import { useSession } from "./SessionContext";
@@ -18,11 +19,13 @@ type MovieContext = {
   movies: Movie[];
   movie: MovieDetails | null;
   movieRating: number | null;
+  searchData: SearchData[];
   getMovies: (page: number) => void;
   getMovieDetails: (movieId: string) => void;
   setMovie: React.Dispatch<React.SetStateAction<MovieDetails | null>>;
   handleRateMovie: (rating: number) => void;
   setMovieRating: React.Dispatch<React.SetStateAction<number | null>>;
+  search: (query: string) => void;
 };
 
 const Context = createContext<MovieContext | null>(null);
@@ -110,6 +113,11 @@ type MovieProviderProps = {
   children: ReactNode;
 };
 
+type SearchData = {
+  id: number;
+  title: string;
+};
+
 export function MovieProvider({ children }: MovieProviderProps) {
   const { session } = useSession();
 
@@ -126,7 +134,7 @@ export function MovieProvider({ children }: MovieProviderProps) {
   }
 
   function getMovieDetails(movieId: string) {
-    getMovieDetailsApi(movieId).then((movieDetails) => {
+    getMovieDetailsApi(movieId).then((movieDetails: MovieDetails) => {
       getRatedMovies(session?.guest_session_id!).then((ratedMovies) => {
         let ratedMovie = ratedMovies.results.find((r: any) => {
           return r.id === Number(movieId);
@@ -152,17 +160,31 @@ export function MovieProvider({ children }: MovieProviderProps) {
     });
   }
 
+  const [searchData, setSearchData] = useState<SearchData[]>([]);
+
+  function search(query: string) {
+    searchMovie(query).then((data) => {
+      let originalArray = data.results.slice(0, 6);
+      let newArray = originalArray.map((object: SearchData) => {
+        return { id: object.id, title: object.title };
+      });
+      setSearchData(newArray);
+    });
+  }
+
   return (
     <Context.Provider
       value={{
         movies,
         movie,
         movieRating,
+        searchData,
         getMovies,
         getMovieDetails,
         setMovie,
         handleRateMovie,
         setMovieRating,
+        search,
       }}
     >
       {children}

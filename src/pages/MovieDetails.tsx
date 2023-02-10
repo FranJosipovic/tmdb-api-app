@@ -68,6 +68,11 @@ export default function MovieDetails() {
               <p className="overview">{movie.overview}</p>
             </div>
           </div>
+          <div className="genres-wrapper">
+            {movie.genres.map((genre) => {
+              return <span className="genre">{genre.name}</span>;
+            })}
+          </div>
         </div>
       )}
     </div>
