@@ -9,6 +9,9 @@ import {
 import {
   getMovieDetailsApi,
   getNowPlayingMovies,
+  getPopularMovies,
+  getTopRatedMovies,
+  getUpcomingMovies,
   rateMovie,
   searchMovie,
 } from "../api/movie";
@@ -20,12 +23,16 @@ type MovieContext = {
   movie: MovieDetails | null;
   movieRating: number | null;
   searchData: SearchData[];
+  currentMovieCategory: string;
+  MOVIE_CATEGORIES: string[];
   getMovies: (page: number) => void;
   getMovieDetails: (movieId: string) => void;
   setMovie: React.Dispatch<React.SetStateAction<MovieDetails | null>>;
   handleRateMovie: (rating: number) => void;
   setMovieRating: React.Dispatch<React.SetStateAction<number | null>>;
   search: (query: string) => void;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentMovieCategory: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const Context = createContext<MovieContext | null>(null);
@@ -125,12 +132,65 @@ export function MovieProvider({ children }: MovieProviderProps) {
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const [movieRating, setMovieRating] = useState<number | null>(null);
 
+  const MOVIE_CATEGORIES = ["Now Playing", "Popular", "Top Rated", "Upcoming"];
+
+  const [currentMovieCategory, setCurrentMovieCategory] = useState<string>(
+    MOVIE_CATEGORIES[0]
+  );
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    getMovies(currentPage);
+  }, [currentPage, currentMovieCategory]);
+
   function getMovies(page: number) {
-    getNowPlayingMovies(page).then((data) => {
-      setMovies((prevData: Movie[]) => {
-        return [...prevData, ...data.results];
-      });
-    });
+    switch (currentMovieCategory) {
+      case "Now Playing":
+        console.log("now playing");
+        getNowPlayingMovies(page).then((data) => {
+          setMovies((prevData: Movie[]) => {
+            if (page === 1) {
+              return [...data.results];
+            }
+            return [...prevData, ...data.results];
+          });
+        });
+        break;
+      case "Popular":
+        console.log("popular");
+        getPopularMovies(page).then((data) => {
+          setMovies((prevData: Movie[]) => {
+            if (page === 1) {
+              return [...data.results];
+            }
+            return [...prevData, ...data.results];
+          });
+        });
+        break;
+      case "Top Rated":
+        console.log("top rated");
+        getTopRatedMovies(page).then((data) => {
+          setMovies((prevData: Movie[]) => {
+            if (page === 1) {
+              return [...data.results];
+            }
+            return [...prevData, ...data.results];
+          });
+        });
+        break;
+      case "Upcoming":
+        console.log("upcoming");
+        getUpcomingMovies(page).then((data) => {
+          setMovies((prevData: Movie[]) => {
+            if (page === 1) {
+              return [...data.results];
+            }
+            return [...prevData, ...data.results];
+          });
+        });
+        break;
+    }
   }
 
   function getMovieDetails(movieId: string) {
@@ -164,6 +224,7 @@ export function MovieProvider({ children }: MovieProviderProps) {
 
   function search(query: string) {
     searchMovie(query).then((data) => {
+      console.log(data.results);
       let originalArray = data.results.slice(0, 6);
       let newArray = originalArray.map((object: SearchData) => {
         return { id: object.id, title: object.title };
@@ -179,12 +240,16 @@ export function MovieProvider({ children }: MovieProviderProps) {
         movie,
         movieRating,
         searchData,
+        currentMovieCategory,
+        MOVIE_CATEGORIES,
         getMovies,
         getMovieDetails,
         setMovie,
         handleRateMovie,
         setMovieRating,
         search,
+        setCurrentPage,
+        setCurrentMovieCategory,
       }}
     >
       {children}

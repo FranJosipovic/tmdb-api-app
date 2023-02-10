@@ -9,7 +9,7 @@ export const getNowPlayingMovies = (page: number = 1) => {
   ).then((res) => res.json());
 };
 
-export const getPopularMovies = (page: Number = 1) => {
+export const getPopularMovies = (page: number = 1) => {
   return fetch(
     `https://api.themoviedb.org/3/movie/popular?api_key=${
       import.meta.env.VITE_APP_API_KEY
@@ -17,6 +17,22 @@ export const getPopularMovies = (page: Number = 1) => {
     {
       method: "GET",
     }
+  ).then((res) => res.json());
+};
+
+export const getTopRatedMovies = (page: number = 1) => {
+  return fetch(
+    `https://api.themoviedb.org/3/movie/top_rated?api_key=${
+      import.meta.env.VITE_APP_API_KEY
+    }&language=en-US&page=${page}`
+  ).then((res) => res.json());
+};
+
+export const getUpcomingMovies = (page: number = 1) => {
+  return fetch(
+    `https://api.themoviedb.org/3/movie/upcoming?api_key=${
+      import.meta.env.VITE_APP_API_KEY
+    }&language=en-US&page=${page}`
   ).then((res) => res.json());
 };
 

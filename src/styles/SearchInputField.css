@@ -44,3 +44,12 @@ input[type="text"] {
     display: block;
     width: 40vw;
 }
+
+.search-item{
+    padding: 2px;
+}
+
+.search-item:hover{
+    cursor: pointer;
+    background-color: darkgray;
+}

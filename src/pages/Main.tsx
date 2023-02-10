@@ -2,16 +2,11 @@ import React, { useEffect, useState } from "react";
 import MovieCard from "../components/MovieCard";
 import TopActionBar from "../components/TopActionBar";
 import { useMovie } from "../context/MovieContext";
-import { Movie } from "../context/MovieContext";
+import { BsShuffle } from "react-icons/bs";
+import { addListener } from "process";
 
 export default function Main() {
-  const { getMovies, movies } = useMovie();
-
-  const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    getMovies(currentPage);
-  }, [currentPage]);
+  const { setCurrentPage, movies } = useMovie();
 
   return (
     <div className="screen">
@@ -23,22 +18,15 @@ export default function Main() {
               return <MovieCard movie={movie} />;
             })}
         </div>
-        <div
-          style={{
-            width: "100%",
-            height: "3vh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: "20px",
-            paddingBottom: "3vh",
-          }}
-        >
+        <div className="load-shuffle-wrapper">
           <button
             className="load-btn"
             onClick={() => setCurrentPage((prevState) => prevState + 1)}
           >
             Load More
+          </button>
+          <button className="shuffle-btn">
+            <BsShuffle size={"50%"} />
           </button>
         </div>
       </div>
